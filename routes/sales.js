@@ -3,8 +3,8 @@ const router = express.Router();
 
 const salesController = require("../controller/salesController");
 
-router.post("/sales", salesController.createSales);
-router.get("/sales/:id", salesController.getSalesById);
+router.post("/addSales", salesController.createSales);
+router.get("/sale/:id", salesController.getSalesById);
 router.put("/sales/:id", salesController.updateSales);
 router.delete("/sales/:id", salesController.deleteSales);
 router.post("/sales/:id", salesController.calculTotal);

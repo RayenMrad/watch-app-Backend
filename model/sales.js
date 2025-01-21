@@ -13,7 +13,7 @@ const salesSchema = new mongoose.Schema(
       required: true,
     },
     quantity: { type: Number, required: true },
-    totalPrice: { type: String, required: true },
+    totalPrice: { type: Number, required: true },
   },
   { timestamps: true }
 );

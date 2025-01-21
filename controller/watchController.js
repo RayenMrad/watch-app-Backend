@@ -14,7 +14,7 @@ const addWatch = async (req, res) => {
 const getWatchById = async (req, res) => {
   const wid = req.params.id;
   try {
-    await Watch.findById(wid).then(async (w) => {
+    await watch.findById(wid).then(async (w) => {
       if (w) {
         res.status(200).json(w);
       } else {
@@ -40,11 +40,25 @@ const getAllWatchs = async (req, res) => {
   }
 };
 
-const deleteWatch = async (req, res) => {
-  const wid = req.param.id;
+const getWatchByCategoryId = async (req, res) => {
+  const cid = req.params.category;
   try {
-    const watch = await watch.findByIdAndDelete(wid);
-    if (!watch) {
+    const watches = await watch.find({ category: cid }).populate("category"); // Find watches by category ID and populate category details
+    if (watches.length > 0) {
+      res.status(200).json(watches);
+    } else {
+      res.status(404).json({ msg: "No watches found for the given category!" });
+    }
+  } catch (err) {
+    res.status(500).json({ msg: "Server error", error: err });
+  }
+};
+
+const deleteWatch = async (req, res) => {
+  const wid = req.params.id;
+  try {
+    const Watch = await watch.findByIdAndDelete(wid);
+    if (!Watch) {
       return res.status(404).json({ msg: "watch not found !" });
     } else {
       res.status(200).json({ msg: "watch deleted successfully  !" });
@@ -59,4 +73,5 @@ module.exports = {
   getWatchById,
   deleteWatch,
   getAllWatchs,
+  getWatchByCategoryId,
 };

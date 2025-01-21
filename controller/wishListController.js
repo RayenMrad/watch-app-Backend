@@ -2,7 +2,7 @@ const wishList = require("../model/wishList");
 
 //add wishlist
 const createWishList = async (req, res) => {
-  const newWishList = new WishList(req.body);
+  const newWishList = new wishList(req.body);
   try {
     const savedWishList = await newWishList.save();
     res.status(201).json(savedWishList);
@@ -12,9 +12,9 @@ const createWishList = async (req, res) => {
 };
 
 const getWishListById = async (req, res) => {
-  const uid = req.body.userId;
+  const uid = req.params.userId;
   try {
-    await WishList.findOne({ userId: uid }).then(async (wishlist) => {
+    await wishList.findOne(uid).then(async (wishlist) => {
       if (wishlist) {
         res.status(200).json(wishlist);
       } else {
@@ -27,14 +27,14 @@ const getWishListById = async (req, res) => {
 };
 
 const updateWishList = async (req, res) => {
-  var id = req.body.id;
-  var watchs = req.body.watchs;
+  const id = req.params.id;
+  const watchs = req.body.watches;
 
   try {
-    const updatedWishList = await WishList.findByIdAndUpdate(
+    const updatedWishList = await wishList.findByIdAndUpdate(
       id,
       {
-        watchs: watchs,
+        watches: watchs,
       },
       { new: true }
     );

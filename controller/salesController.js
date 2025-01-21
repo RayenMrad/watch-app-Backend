@@ -1,11 +1,12 @@
 const sales = require("../model/sales");
+const Variant = require("../model/variant");
 
 //add sales
 const createSales = async (req, res) => {
   const { variantId, userId, quantity, totalPrice } = req.body;
 
   try {
-    const variant = await variant.findById(variantId);
+    const variant = await Variant.findById(variantId);
     if (!variant) {
       return res.status(404).json({ msg: "variant not found" });
     }
@@ -25,8 +26,8 @@ const createSales = async (req, res) => {
     });
 
     const savedSales = await newSales.save();
-    variant.quantity -= quantity;
-    await variant.save();
+    // variant.quantity -= quantity;
+    // await variant.save();
     res.status(201).json({ msg: "sale created successfully ! " });
   } catch (err) {
     res.status(500).json({ msg: "error creating sales ", error: err.message });
@@ -34,13 +35,13 @@ const createSales = async (req, res) => {
 };
 
 const getSalesById = async (req, res) => {
-  const sid = req.body.id;
+  const sid = req.params.id;
   try {
-    const sales = await sales.findById(sid);
-    if (!sales) {
+    const Sales = await sales.findById(sid);
+    if (!Sales) {
       res.status(404).json({ msg: "sales Not Found ! " });
     } else {
-      res.status(200).json(sales);
+      res.status(200).json(Sales);
     }
   } catch (err) {
     res.status(500).json(err);
@@ -64,13 +65,13 @@ const updateSales = async (req, res) => {
 };
 
 const deleteSales = async (req, res) => {
-  const sid = req.body.id;
+  const sid = req.params.id;
   try {
-    const sales = await sales.findByIdAndDelete(sid);
-    if (!sales) {
+    const Sales = await sales.findByIdAndDelete(sid);
+    if (!Sales) {
       res.status(404).json({ msg: "sales Not Found ! " });
     } else {
-      res.status(200).json(sales);
+      res.status(200).json(Sales);
     }
   } catch (err) {
     res

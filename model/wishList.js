@@ -2,9 +2,7 @@ const mongoose = require("mongoose");
 
 const wishListSchema = new mongoose.Schema(
   {
-    watches: [
-      { type: mongoose.Schema.Types.ObjectId, ref: "Watch", required: true },
-    ],
+    watches: [{ type: String, Required: true }],
     userId: { type: String, required: true },
   },
   { timestamps: true }

@@ -27,18 +27,21 @@ const getCommandById = async (req, res) => {
 
 //cancel command
 const cancelCommand = async (req, res) => {
-  const cui = req.params.id;
+  const cui = req.params.id; // Get the command ID from the request params
   try {
-    const commandFound = await command.findById(cui);
+    const updatedCommand = await command.findByIdAndUpdate(
+      cui,
+      { statutCommand: "cancelled" },
+      { new: true }
+    );
 
-    if (!commandFound) {
+    if (!updatedCommand) {
       return res.status(404).json({ msg: "Command not found" });
     }
-    commandFound.status = "canceled";
-    const updatedCommand = await commandFound.save();
+
     res.status(200).json(updatedCommand);
   } catch (err) {
-    res.status(500).json(err);
+    res.status(500).json({ error: err.message });
   }
 };
 

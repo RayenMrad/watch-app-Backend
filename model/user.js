@@ -17,9 +17,7 @@ const userSchema = new mongoose.Schema(
     birthDate: { type: Date, required: true },
     commandHistory: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "command",
-        required: true,
+        type: String,
       },
     ],
     password: { type: String, required: true },
