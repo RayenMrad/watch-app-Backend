@@ -2,14 +2,12 @@ const mongoose = require("mongoose");
 
 const salesSchema = new mongoose.Schema(
   {
-    variantId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "variant",
+    watchId: {
+      type: String,
       required: true,
     },
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      type: String,
       required: true,
     },
     quantity: { type: Number, required: true },

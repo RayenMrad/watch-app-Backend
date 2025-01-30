@@ -1,3 +1,4 @@
+const category = require("../model/category");
 const watch = require("../model/watchs");
 
 //add Watch
@@ -68,10 +69,44 @@ const deleteWatch = async (req, res) => {
   }
 };
 
+// Get soretd watchs by category
+const getSortedWatchsByCat = async (req, res) => {
+  try {
+    const watchs = await watch.find().sort({ category: -1 });
+    res.status(200).json(watchs);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch Watchs." });
+  }
+};
+
+// Get soretd watchs
+const getSortedWatchsByCreationDate = async (req, res) => {
+  try {
+    const watchs = await watch.find().sort({ createdAt: -1 });
+    res.status(200).json(watchs);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch Watchs." });
+  }
+};
+
+const getSortedWatchsBySales = async (req, res) => {
+  try {
+    const watchs = await watch
+      .find({ saleCount: { $gt: 0 } })
+      .sort({ saleCount: -1 });
+    res.status(200).json(watchs);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch Watchs." });
+  }
+};
+
 module.exports = {
   addWatch,
   getWatchById,
   deleteWatch,
   getAllWatchs,
   getWatchByCategoryId,
+  getSortedWatchsByCat,
+  getSortedWatchsByCreationDate,
+  getSortedWatchsBySales,
 };

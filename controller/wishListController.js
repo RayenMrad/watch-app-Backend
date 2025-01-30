@@ -12,9 +12,9 @@ const createWishList = async (req, res) => {
 };
 
 const getWishListById = async (req, res) => {
-  const uid = req.params.userId;
+  const wid = req.params.id;
   try {
-    await wishList.findOne(uid).then(async (wishlist) => {
+    await wishList.findOne({ userId: wid }).then(async (wishlist) => {
       if (wishlist) {
         res.status(200).json(wishlist);
       } else {

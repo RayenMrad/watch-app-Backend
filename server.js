@@ -9,7 +9,7 @@ const wishListRoute = require("./routes/wishList");
 const cartRoute = require("./routes/cart");
 const salesRoute = require("./routes/sales");
 const authRoute = require("./routes/auth");
-const variantRoute = require("./routes/variant");
+// const variantRoute = require("./routes/variant");
 const commandRoute = require("./routes/command");
 
 const app = express();
@@ -36,6 +36,6 @@ app.use("/api", watchRoute);
 app.use("/api", categoryRoute);
 app.use("/api", wishListRoute);
 app.use("/api", cartRoute);
-app.use("/api", variantRoute);
+// app.use("/api", variantRoute);
 app.use("/api", salesRoute);
 app.use("/api", commandRoute);

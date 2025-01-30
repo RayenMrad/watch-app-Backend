@@ -161,26 +161,53 @@ const updateUser = async (req, res) => {
   }
 };
 
-const updatePassword = async (req, res) => {
-  const uid = req.params.id;
-  const updateFields = {
-    password: req.body.password,
-  };
+const updatepassword = async (req, res) => {
+  var oldpasswordd = req.body.oldPassword;
+  var newpasswordd = req.body.newPassword;
+  var id = req.body.id;
 
-  try {
-    const updatedUser = await User.findByIdAndUpdate(uid, updateFields, {
-      new: true,
-    });
-    if (!updatedUser) {
-      res.status(404).json({ msg: "user not found" });
+  await User.findOne({ _id: id }).then(async (user) => {
+    if (user) {
+      bcrypt.compare(oldpasswordd, user.password, async function (err, result) {
+        if (err) {
+          return res.status(500).json({
+            message: err,
+          });
+        }
+        if (result) {
+          bcrypt.hash(newpasswordd, 10, async function (err, newhashedPass) {
+            if (err) {
+              return res.status(500).json({
+                message: err,
+              });
+            }
+            await User.findOne({ _id: id }).then(async (user) => {
+              if (user) {
+                await User.findByIdAndUpdate(user.id, {
+                  password: newhashedPass,
+                });
+                res.json({
+                  message: "password updated suuccessful",
+                });
+              } else {
+                return res.status(404).json({
+                  message: "no user  found",
+                });
+              }
+            });
+          });
+        } else {
+          return res.status(202).json({
+            message: "wrong password",
+          });
+        }
+      });
     } else {
-      res
-        .status(200)
-        .json({ msg: "password updated successfully", updatedUser });
+      return res.status(404).json({
+        message: "no user  found",
+      });
     }
-  } catch (err) {
-    res.status(500).json({ msg: "password not updated" });
-  }
+  });
 };
 
 const updateUserImage = async (req, res) => {
@@ -309,7 +336,7 @@ module.exports = {
   login,
   getUserById,
   updateUser,
-  updatePassword,
+  updatepassword,
   updateUserImage,
   Resetpassword,
   VerifCode,

@@ -1,33 +1,11 @@
 const sales = require("../model/sales");
-const Variant = require("../model/variant");
+const Watch = require("../model/watchs");
 
 //add sales
 const createSales = async (req, res) => {
-  const { variantId, userId, quantity, totalPrice } = req.body;
-
   try {
-    const variant = await Variant.findById(variantId);
-    if (!variant) {
-      return res.status(404).json({ msg: "variant not found" });
-    }
-
-    if (variant.quantity < quantity) {
-      return res
-        .status(400)
-        .json({ msg: "insufisant stock for this variant !" });
-    }
-
-    //const totalPrice = quantity * variant.watchId.price;
-    const newSales = new sales({
-      variantId,
-      userId,
-      quantity,
-      totalPrice,
-    });
-
+    const newSales = new sales(req.body);
     const savedSales = await newSales.save();
-    // variant.quantity -= quantity;
-    // await variant.save();
     res.status(201).json({ msg: "sale created successfully ! " });
   } catch (err) {
     res.status(500).json({ msg: "error creating sales ", error: err.message });
@@ -48,21 +26,53 @@ const getSalesById = async (req, res) => {
   }
 };
 
-const updateSales = async (req, res) => {
-  const sid = req.body.id;
+const getAllSales = async (req, res) => {
   try {
-    const sales = await sales.findByIdAndUpdate(sid);
-    if (!sales) {
-      res.status(404).json({ msg: "sales Not Found ! " });
-    } else {
-      res.status(200).json(sales);
-    }
-  } catch (err) {
-    res
-      .status(500)
-      .json({ msg: "Error to update sales ! ", error: err.message });
+    const userId = req.params.userId;
+    const Sales = await sales.find();
+
+    res.status(200).json(Sales);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
   }
 };
+
+const updateSale = async (req, res) => {
+  try {
+    const sale = await sales.findByIdAndUpdate(req.params.id, req.body, {
+      new: true,
+    });
+    res.status(200).json(sale);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to update the sale." });
+  }
+};
+
+// const updateSales = async (req, res) => {
+//   const sid = req.params.id;
+//   const { watchId, userId, quantity, totalPrice } = req.body;
+//   try {
+//     const Sales = await sales.findByIdAndUpdate(
+//       sid,
+//       {
+//         watchId: watchId,
+//         userId: userId,
+//         quantity: quantity,
+//         totalPrice: totalPrice,
+//       },
+//       { new: true }
+//     );
+//     if (!Sales) {
+//       res.status(404).json({ msg: "sales Not Found ! " });
+//     } else {
+//       res.status(200).json(Sales);
+//     }
+//   } catch (err) {
+//     res
+//       .status(500)
+//       .json({ msg: "Error to update sales ! ", error: err.message });
+//   }
+// };
 
 const deleteSales = async (req, res) => {
   const sid = req.params.id;
@@ -81,19 +91,19 @@ const deleteSales = async (req, res) => {
 };
 
 const calculTotal = async (req, res) => {
-  const { variantId, quantity } = req.body;
+  const { watchId, quantity } = req.body;
 
   try {
-    const variant = await Variant.findById(variantId).populate("watchId");
-    if (!variant) {
-      return res.status(404).json({ msg: "Variant not found" });
+    const watch = await Watch.findById(watchId);
+    if (!watch) {
+      return res.status(404).json({ msg: "watch not found" });
     }
 
     if (quantity <= 0) {
       return res.status(400).json({ msg: "Quantity must be greater than 0" });
     }
 
-    const totalPrice = quantity * variant.watchId.price;
+    const totalPrice = quantity * watch.price;
 
     res.status(200).json({ totalPrice });
   } catch (err) {
@@ -105,7 +115,8 @@ const calculTotal = async (req, res) => {
 module.exports = {
   createSales,
   getSalesById,
-  updateSales,
+  updateSale,
   deleteSales,
   calculTotal,
+  getAllSales,
 };

@@ -6,15 +6,15 @@ const User = require("../model/user");
 
 const authController = require("../controller/authController");
 
-router.post("/authregister", authController.register);
+router.post("/register", authController.register);
 router.post("/login", authController.login);
 router.get("/user/:id", authController.getUserById);
 router.put("/updateUser/:id", authController.updateUser);
-router.put("/user/password/:id", authController.updatePassword);
-router.put("/user/image/:id", authController.updateUserImage);
+router.put("/update-password", authController.updatepassword);
+router.put("/updateImage/:id", authController.updateUserImage);
 router.post("/forgetPassword", authController.forgetPassword);
-router.post("/VerifCode", authController.VerifCode);
-router.post("/Resetpassword", authController.Resetpassword);
+router.post("/verifCode", authController.VerifCode);
+router.post("/resetPassword", authController.Resetpassword);
 
 filename = "";
 const mystorage = multer.diskStorage({
