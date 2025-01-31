@@ -4,21 +4,20 @@ const user = require("./user");
 const commandSchema = new mongoose.Schema(
   {
     userId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "user",
+      type: String,
       required: true,
     },
     sales: [
       {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "sales",
+        type: String,
         required: true,
       },
     ],
     adresse: { type: String, required: true },
     reference: { type: String, required: true },
-    dateCommand: { type: Date, required: true },
-    statutCommand: {
+    commandTotalPrice: { type: Number, required: true },
+    commandDate: { type: Date, required: true },
+    commandStatus: {
       type: String,
       enum: ["paid", "shipped", "completed", "cancelled"],
       default: "pending",
