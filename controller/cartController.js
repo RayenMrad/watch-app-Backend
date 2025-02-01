@@ -12,9 +12,9 @@ const createCart = async (req, res) => {
 };
 
 const getCartByUserId = async (req, res) => {
-  const uid = req.params.userId;
+  const uid = req.params.id;
   try {
-    await Cart.findOne(uid).then(async (cart) => {
+    await Cart.findOne({ userId: uid }).then(async (cart) => {
       if (cart) {
         res.status(200).json(cart);
       } else {
