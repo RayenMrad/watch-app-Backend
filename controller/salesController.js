@@ -6,7 +6,7 @@ const createSales = async (req, res) => {
   try {
     const newSales = new sales(req.body);
     const savedSales = await newSales.save();
-    res.status(201).json({ msg: "sale created successfully ! " });
+    res.status(201).json(savedSales);
   } catch (err) {
     res.status(500).json({ msg: "error creating sales ", error: err.message });
   }

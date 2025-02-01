@@ -7,6 +7,7 @@ const createWishList = async (req, res) => {
     const savedWishList = await newWishList.save();
     res.status(201).json(savedWishList);
   } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 };
